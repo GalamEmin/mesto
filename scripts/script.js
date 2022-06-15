@@ -1,5 +1,4 @@
 
-// Variables
 
 const profileElement = document.querySelector('.profile');
 
@@ -18,7 +17,7 @@ const formElement = popupElement.querySelector('.popup__form');
 const nameInput = formElement.querySelector('.popup__input[name="name"]');
 const jobInput = formElement.querySelector('.popup__input[name="job"]');
 
-// Functions
+
 
 function popupToggle() {
   popupElement.classList.toggle(popupElementOpenedString);
@@ -40,7 +39,7 @@ function formSubmitHandler(e) {
   popupToggle();
 }
 
-// Listeners
+
 
 editButton.addEventListener('click', popupOpen);
 closeButton.addEventListener('click', popupToggle);
