@@ -1,0 +1,10 @@
+
+.elements {
+    padding-bottom: calc(145px - 138px);
+}
+
+@media screen and (max-width: 767px) {
+    .elements {
+        padding-bottom: calc(98px - 86px);
+    }
+}
