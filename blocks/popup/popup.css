@@ -13,8 +13,7 @@
     align-items: flex-start;
 }
   
-.popup::before {
-    content: '';   
+.popup::before {  
     position: fixed;
     top: 0;
     right: 0;
