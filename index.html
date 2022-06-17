@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title lang="en">Mesto · Russia</title>
+    <link rel="stylesheet" href="./pages/index.css">
+
+  </head>
+  <body class="page">
+    <header class="header">
+      <a target="_blank" href="#" class="header__logo"></a>
+    </header>
+
+    <main class="content">
+
+      <section class="profile">
+        
+        <img src="./images/Cousteau.jpg" alt="Кусто" class="profile__avatar">
+        <div class="profile__info">
+          <h1 class="profile__name">Жак-Ив Кусто</h1>
+          <p class="profile__description">Исследователь океана</p>
+          <button type="button" class="profile__edit-button"></button>
+        </div>
+        <button type="button" class="profile__add-button"></button>
+      </section>
+
+      <section class="elements">
+        <ul class="elements__list">
+          <li class="element">
+            <img src="./images/alex-kolodziej-l86QrwE_doA-unsplash.jpg" alt="Белая Сова" class="element__image">
+            <div class="element__container">
+              <h2 class="element__title">Белая Сова</h2>
+              <button type="button" class="element__like-button"></button>
+            </div>
+          </li>
+          <li class="element">
+            <img src="./images/haniel-espinal-FBxWhv0Nf1E-unsplash.jpg" alt="Таймс-сквер" class="element__image">
+            <div class="element__container">
+              <h2 class="element__title">Таймс-сквер</h2>
+              <button type="button" class="element__like-button"></button>
+            </div>
+          </li>
+          <li class="element">
+            <img src="./images/sean-benesh-VnmbcgAfL3Q-unsplash.jpg" alt="Вертикаль" class="element__image">
+            <div class="element__container">
+              <h2 class="element__title">Вертикаль</h2>
+              <button type="button" class="element__like-button"></button>
+            </div>
+          </li>
+          <li class="element">
+            <img src="./images/ali-choubin-V8Czzpxg5Mw-unsplash.jpg" alt="Водопад" class="element__image">
+            <div class="element__container">
+              <h2 class="element__title">Водопад</h2>
+              <button type="button" class="element__like-button"></button>
+            </div>
+          </li>
+          <li class="element">
+            <img src="./images/megan-ruth-fY3DXRCNP_c-unsplash.jpg" alt="Девушка в Красном" class="element__image">
+            <div class="element__container">
+              <h2 class="element__title">Девушка в Красном</h2>
+              <button type="button" class="element__like-button"></button>
+            </div>
+          </li>
+          <li class="element">
+            <img src="./images/filipp-romanovski-4aJEp9bgHJI-unsplash.jpg" alt="Пора обедать" class="element__image">
+            <div class="element__container">
+              <h2 class="element__title">Пора обедать</h2>
+              <button type="button" class="element__like-button"></button>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+    </main>
+
+    <footer class="footer">
+      <a target="_blank" href="#" class="footer__copyright">&copy; 2020 Mesto Russia</a>
+    </footer>
+
+    <section class="popup">
+      <button type="reset" class="popup__close-button"></button>
+      <div class="popup__container">
+        <h2 class="popup__title">Редактировать профиль</h2>
+        <form class="popup__form">
+          <input autofocus type="text" class="popup__input" name="name" placeholder="Имя">
+          <input type="text" class="popup__input" name="job" placeholder="О себе">
+          <button type="submit" class="popup__button">Сохранить</button>
+        </form>
+      </div>
+    </section>
+
+    <script src="./scripts/script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,8 @@
+
+.element__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-height: 23px;
+  margin: 30px 20px;
+  }
