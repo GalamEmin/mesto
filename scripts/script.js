@@ -17,8 +17,6 @@ const formElement = popupElement.querySelector('.popup__form');
 const nameInput = formElement.querySelector('.popup__input[name="name"]');
 const jobInput = formElement.querySelector('.popup__input[name="job"]');
 
-
-
 function popupToggle() {
   popupElement.classList.toggle(popupElementOpenedString);
 }
@@ -38,8 +36,6 @@ function formSubmitHandler(e) {
 
   popupToggle();
 }
-
-
 
 editButton.addEventListener('click', popupOpen);
 closeButton.addEventListener('click', popupToggle);
