@@ -1,6 +1,6 @@
 
 .profile__add-button {
-    position: absolute;
+    display: flex;
     right: 0;
     min-height: 50px;
     min-width: 150px;

@@ -2,6 +2,7 @@
 .profile {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     position: relative;
     padding-top: 41px;
     padding-bottom: 51px;

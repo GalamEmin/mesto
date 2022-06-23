@@ -12,7 +12,7 @@ const popupElementOpenedString = 'popup_opened';
 
 const closeButton = popupElement.querySelector('.popup__close-button');
 
-const formElement = popupElement.querySelector('.popup__form');
+const formElement = popupElement.querySelector('.popup__form[name="edit-form"]');
 
 const nameInput = formElement.querySelector('.popup__input[name="name"]');
 const jobInput = formElement.querySelector('.popup__input[name="job"]');

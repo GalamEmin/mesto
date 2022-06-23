@@ -10,12 +10,11 @@
     background-size: contain;
     background-origin: content-box;
     padding: 6px;
-    position: absolute;
-    top: 15px;
-    right: 0;
     cursor: pointer;
     transition-property: opacity;
     transition-duration: .2s;
+    margin-left: 25px;
+    margin-top: 5px;
 }
   
 .profile__edit-button:hover {

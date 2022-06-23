@@ -20,9 +20,11 @@
         
         <img src="./images/Cousteau.jpg" alt="Кусто" class="profile__avatar">
         <div class="profile__info">
-          <h1 class="profile__name">Жак-Ив Кусто</h1>
+          <div class="profile__list">
+            <h1 class="profile__name">Жак-Ив Кусто</h1>
+            <button type="button" class="profile__edit-button"></button>
+          </div>  
           <p class="profile__description">Исследователь океана</p>
-          <button type="button" class="profile__edit-button"></button>
         </div>
         <button type="button" class="profile__add-button"></button>
       </section>
@@ -46,7 +48,7 @@
           <li class="element">
             <img src="./images/sean-benesh-VnmbcgAfL3Q-unsplash.jpg" alt="Вертикаль" class="element__image">
             <div class="element__container">
-              <h2 class="element__title">Вертикаль</h2>
+              <h2 class="element__title">Скалолаз</h2>
               <button type="button" class="element__like-button"></button>
             </div>
           </li>
@@ -81,10 +83,10 @@
     </footer>
 
     <section class="popup">
-      <button type="reset" class="popup__close-button"></button>
       <div class="popup__container">
+        <button type="reset" class="popup__close-button"></button>
         <h2 class="popup__title">Редактировать профиль</h2>
-        <form class="popup__form">
+        <form class="popup__form" name="edit-form">
           <input autofocus type="text" class="popup__input" name="name" placeholder="Имя">
           <input type="text" class="popup__input" name="job" placeholder="О себе">
           <button type="submit" class="popup__button">Сохранить</button>
@@ -92,6 +94,6 @@
       </div>
     </section>
 
-    <script src="./scripts/script.js"></script>
+    <script src="./scripts/index.js"></script>
   </body>
 </html>
