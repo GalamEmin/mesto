@@ -5,3 +5,9 @@
     display: flex;
     align-items: center;
 }
+
+@media screen and (max-width: 767px) {
+    .footer {
+        margin: 48px auto 36px;
+    }
+}
