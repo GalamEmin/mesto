@@ -1,7 +1,7 @@
 
 .profile__info {
     margin-left: 30px;
-    margin-right: 237px;
+    margin-right: 230px;
     position: relative;
    
 }
@@ -9,7 +9,6 @@
 @media screen and (max-width: 767px) {
     .profile__info {
         margin: 0;
-        padding: 0 calc(10px + 18px);
         margin-top: 26px;
     }
 }
