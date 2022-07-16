@@ -1,4 +1,3 @@
-
 .elements__list {
   list-style-type: none;
   margin-top: 0;
@@ -9,4 +8,3 @@
   justify-content: center;
   grid-template-columns: repeat(auto-fill, 282px);
 }
-

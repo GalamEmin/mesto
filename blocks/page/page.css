@@ -1,11 +1,11 @@
 
 .page {
-    background: #000;
-    font-family: 'Inter', Arial, Helvetica, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
-    color: #fff;
-    max-width: 880px;
-    margin: 0 auto;
+  background: #000;
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  color: #fff;
+  max-width: 880px;
+  margin: 0 auto;
 }
