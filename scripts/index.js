@@ -11,7 +11,7 @@ profileEditorOpenButton.addEventListener('click', () => {
   nameInput.value = nameElement.textContent;
   jobInput.value = jobElement.textContent;
 
-  activate(profileEditorPopup, 'popup_opened')
+  openPopup(profileEditorPopup)
 });
 
 const profileEditorSaveButton = document.querySelector('#profile-editor > div:nth-child(1) > form:nth-child(3) > button:nth-child(3)');
@@ -19,16 +19,16 @@ profileEditorSaveButton.addEventListener('click', () => {
   nameElement.textContent = nameInput.value;
   jobElement.textContent = jobInput.value;
 
-  disable(profileEditorPopup, 'popup_opened')
+  closePopup(profileEditorPopup)
 });
 
 const profileEditorCloseButton = profileEditorPopup.querySelector('.popup__close-button');
 profileEditorCloseButton.addEventListener('click', () => {
-  disable(profileEditorPopup, 'popup_opened')
+  closePopup(profileEditorPopup)
 });
 
 const elementEditorPopup = document.querySelector('#element-editor');
-const elementEditorForm = elementEditorPopup.querySelector('.popup__form');
+const formAddCard = elementEditorPopup.querySelector('.popup__form');
 elementEditorPopup.addEventListener('submit', e => {
   e.preventDefault();
 
@@ -36,15 +36,15 @@ elementEditorPopup.addEventListener('submit', e => {
 
   addCard(cardInstance, true);
 
-  elementEditorForm.reset();
-  disable(elementEditorPopup, 'popup_opened');
-})
+  formAddCard.reset();
+  closePopup(elementEditorPopup);
+});
 
 const elementEditorOpenButton = document.querySelector('.profile__add-button');
-elementEditorOpenButton.addEventListener('click', () => { activate(elementEditorPopup, 'popup_opened') });
+elementEditorOpenButton.addEventListener('click', () => { openPopup(elementEditorPopup) });
 
 const elementEditorCloseButton = elementEditorPopup.querySelector('.popup__close-button');
-elementEditorCloseButton.addEventListener('click', () => { disable(elementEditorPopup, 'popup_opened') });
+elementEditorCloseButton.addEventListener('click', () => { closePopup(elementEditorPopup) });
 
 const titleInput = elementEditorPopup.querySelector('.popup__input[name="title"]');
 const linkInput = elementEditorPopup.querySelector('.popup__input[name="link"]');
@@ -65,7 +65,7 @@ const popupImage = imageViewerPopup.querySelector('.popup__image');
 const popupCaption = imageViewerPopup.querySelector('.popup__caption');
 const popupImageCloseButton = imageViewerPopup.querySelector('.popup__close-button');
 popupImageCloseButton.addEventListener('click', () => {
-  disable(imageViewerPopup, 'popup_opened')
+  closePopup(imageViewerPopup)
 })
 
 function openPreview(e) {
@@ -74,11 +74,12 @@ function openPreview(e) {
 
   popupCaption.textContent = e.target.alt;
 
-  activate(imageViewerPopup, 'popup_opened')
+  openPopup(imageViewerPopup)
 }
 
+const elementTemplate = document.querySelector('#element-template').content;
+
 function createCard(title, imgLink) {
-  const elementTemplate = document.querySelector('#element-template').content;
   const card = elementTemplate.firstElementChild.cloneNode(1);
 
   const imgElement = card.querySelector('.element__image');
@@ -141,33 +142,27 @@ const initialCards = [
 
 initialCards.forEach(card => {
   const cardInstance = createCard(card.name, card.link);
-  console.log(cardInstance);
   addCard(cardInstance, false);
 });
 
-const closeButton = document.querySelector('.popup__close-button');
-closeButton.addEventListener('click', () => disable(closeButton, 'popup_opened'));
-
-function activate(domElement, className) {
-  console.log(domElement.classList.contains(className));
-  if (!domElement.classList.contains(className)) {
-    domElement.classList.add(className);
+function openPopup(domElement) {
+  if (!domElement.classList.contains('popup_opened')) {
+    domElement.classList.add('popup_opened');
   }
 }
 
-function disable(domElement, className) {
-  console.log(domElement.classList.contains(className));
-  if (domElement.classList.contains(className)) {
-    domElement.classList.remove(className);
+function closePopup(domElement) {
+  if (domElement.classList.contains('popup_opened')) {
+    domElement.classList.remove('popup_opened');
   }
 }
 
-const form = document.querySelector('.popup__form');
-form.addEventListener('submit', e => {
+const formEditProfile = document.querySelector('.popup__form');
+formEditProfile.addEventListener('submit', e => {
   e.preventDefault();
 
   nameElement.textContent = nameInput.value;
   jobElement.textContent = jobInput.value;
 
-  disable(form, 'popup_opened');
+  closePopup(form);
 });
