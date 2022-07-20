@@ -164,5 +164,5 @@ formEditProfile.addEventListener('submit', e => {
   nameElement.textContent = nameInput.value;
   jobElement.textContent = jobInput.value;
 
-  closePopup(form);
+  closePopup(formEditProfile);
 });
