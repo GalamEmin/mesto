@@ -16,7 +16,7 @@ const validation = {
   
     disableFormButton: (data, formElement) => {
       const buttonElement = formElement.querySelector(data.submitButtonSelector);
-      buttonElement.disabled = true;
+      buttonElement.disabled = 1;
     },
   
     resetFormErrors: (data, formElement) => {

@@ -7,23 +7,18 @@ const nameElement = document.querySelector('.profile__name');
 const jobElement = document.querySelector('.profile__description');
 
 const profileEditorOpenButton = document.querySelector('.profile__edit-button');
-const formEditProfile = profileEditorPopup.querySelector('.popup__form');
 profileEditorOpenButton.addEventListener('click', () => {
-  formEditProfile.reset();
-
   nameInput.value = nameElement.textContent;
   jobInput.value = jobElement.textContent;
 
   openPopup(profileEditorPopup)
 });
 
-formEditProfile.addEventListener('submit', (e) => {
-  e.preventDefault();
-
+profileEditorPopup.querySelector('.popup__form').addEventListener('submit', () => {
   nameElement.textContent = nameInput.value;
   jobElement.textContent = jobInput.value;
 
-  closePopup()
+  closePopup(profileEditorPopup)
 });
 
 const elementEditorPopup = document.querySelector('#element-editor');
@@ -36,7 +31,7 @@ formAddCard.addEventListener('submit', e => {
   addCard(cardInstance, true);
 
   formAddCard.reset();
-  closePopup();
+  closePopup(elementEditorPopup);
 });
 
 const elementEditorOpenButton = document.querySelector('.profile__add-button');
@@ -88,11 +83,16 @@ function createCard(title, imgLink) {
 
   imgElement.addEventListener('click', openPreview);
 
-  trashButton.addEventListener('click', (e) => {
+  trashButton.addEventListener('click', (e ) => {
     e.target.parentNode.remove();
   });
   likeButton.addEventListener('click', (e) => {
-    e.target.classList.toggle('element__like-button_active')
+    if (e.target.classList.contains('element__like-button_active')) {
+      e.target.classList.remove('element__like-button_active');
+    } else {
+      e.target.classList.add('element__like-button_active');
+    }
+
   });
 
   return card;
@@ -132,60 +132,36 @@ initialCards.forEach(card => {
   addCard(cardInstance, false);
 });
 
-document.querySelectorAll('.popup').forEach((domElement) => {
-  domElement.addEventListener('click', clickOutsideHandler)
-});
-<<<<<<< HEAD
+let currentClickOutsideHandler;
+let currentKeydownHandler;
 
 function openPopup(domElement) {
-  domElement.classList.add('popup_opened');
-  document.addEventListener('keydown', keydownHandler);
+  if (!domElement.classList.contains('popup_opened')) {
+    domElement.classList.add('popup_opened');
+    currentClickOutsideHandler = (e) => clickOutsideHandler(e, domElement);
+    currentKeydownHandler = (e) => KeydownHandler(e, domElement);
+    domElement.addEventListener('click', currentClickOutsideHandler);
+    document.addEventListener('keydown', currentKeydownHandler);
+  }
 }
 
 function closePopup(domElement) {
-  domElement.classList.remove('popup_opened');
-  document.removeEventListener('keydown', keydownHandler);
-=======
-document.addEventListener('keydown', keydownHandler);
-
-let popupActive;
-
-function openPopup(domElement) {
-  popupActive = domElement;
-  domElement.classList.add('popup_opened');
+  if (domElement.classList.contains('popup_opened')) {
+    domElement.classList.remove('popup_opened');
+    domElement.removeEventListener('click', currentClickOutsideHandler);
+    document.removeEventListener('keydown', currentKeydownHandler);
+  }
 }
 
-function closePopup() {
-  popupActive.classList.remove('popup_opened');
-  popupActive = null;
->>>>>>> 2cb92fa9bfa9c6ecf1474fc72d496affe364a64c
-}
-
-function clickOutsideHandler(e) {
+function clickOutsideHandler(e, domElement) {
   if (e.target === e.currentTarget || e.target.classList.contains('popup__close-button')) {
-<<<<<<< HEAD
-    const popupActive = getPopupActive();
-    closePopup(popupActive);
-=======
-    closePopup();
->>>>>>> 2cb92fa9bfa9c6ecf1474fc72d496affe364a64c
+    closePopup(domElement);
   }
 }
 
-function keydownHandler(e) {
-<<<<<<< HEAD
-  if (e.key === 'Escape') {
-    const popupActive = getPopupActive();
-    closePopup(popupActive);
-  }
-}
-
-function getPopupActive() {
-  return document.querySelector('.popup_opened');
-}
-=======
-  if (popupActive && e.key === 'Escape') {
-    closePopup();
+function KeydownHandler(e, domElement) {
+  if (e.key === 'Escape' && !e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
+    closePopup(domElement);
   }
 }
 
@@ -196,6 +172,5 @@ formEditProfile.addEventListener('submit', e => {
   nameElement.textContent = nameInput.value;
   jobElement.textContent = jobInput.value;
 
-  closePopup();
+  closePopup(formEditProfile);
 });
->>>>>>> 2cb92fa9bfa9c6ecf1474fc72d496affe364a64c
