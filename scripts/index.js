@@ -18,7 +18,7 @@ profileEditorPopup.querySelector('.popup__form').addEventListener('submit', () =
   nameElement.textContent = nameInput.value;
   jobElement.textContent = jobInput.value;
 
-  closePopup(profileEditorPopup)
+  closePopup()
 });
 
 const elementEditorPopup = document.querySelector('#element-editor');
@@ -31,7 +31,7 @@ formAddCard.addEventListener('submit', e => {
   addCard(cardInstance, true);
 
   formAddCard.reset();
-  closePopup(elementEditorPopup);
+  closePopup();
 });
 
 const elementEditorOpenButton = document.querySelector('.profile__add-button');
@@ -83,16 +83,11 @@ function createCard(title, imgLink) {
 
   imgElement.addEventListener('click', openPreview);
 
-  trashButton.addEventListener('click', (e ) => {
+  trashButton.addEventListener('click', (e) => {
     e.target.parentNode.remove();
   });
   likeButton.addEventListener('click', (e) => {
-    if (e.target.classList.contains('element__like-button_active')) {
-      e.target.classList.remove('element__like-button_active');
-    } else {
-      e.target.classList.add('element__like-button_active');
-    }
-
+    e.target.classList.toggle('element__like-button_active')
   });
 
   return card;
@@ -132,36 +127,32 @@ initialCards.forEach(card => {
   addCard(cardInstance, false);
 });
 
-let currentClickOutsideHandler;
-let currentKeydownHandler;
+document.querySelectorAll('.popup').forEach((domElement) => {
+  domElement.addEventListener('click', clickOutsideHandler)
+});
+document.addEventListener('keydown', keydownHandler);
+
+let popupActive;
 
 function openPopup(domElement) {
-  if (!domElement.classList.contains('popup_opened')) {
-    domElement.classList.add('popup_opened');
-    currentClickOutsideHandler = (e) => clickOutsideHandler(e, domElement);
-    currentKeydownHandler = (e) => KeydownHandler(e, domElement);
-    domElement.addEventListener('click', currentClickOutsideHandler);
-    document.addEventListener('keydown', currentKeydownHandler);
-  }
+  popupActive = domElement;
+  domElement.classList.add('popup_opened');
 }
 
-function closePopup(domElement) {
-  if (domElement.classList.contains('popup_opened')) {
-    domElement.classList.remove('popup_opened');
-    domElement.removeEventListener('click', currentClickOutsideHandler);
-    document.removeEventListener('keydown', currentKeydownHandler);
-  }
+function closePopup() {
+  popupActive.classList.remove('popup_opened');
+  popupActive = null;
 }
 
-function clickOutsideHandler(e, domElement) {
+function clickOutsideHandler(e) {
   if (e.target === e.currentTarget || e.target.classList.contains('popup__close-button')) {
-    closePopup(domElement);
+    closePopup();
   }
 }
 
-function KeydownHandler(e, domElement) {
-  if (e.key === 'Escape' && !e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
-    closePopup(domElement);
+function keydownHandler(e) {
+  if (popupActive && e.key === 'Escape') {
+    closePopup();
   }
 }
 
@@ -172,5 +163,5 @@ formEditProfile.addEventListener('submit', e => {
   nameElement.textContent = nameInput.value;
   jobElement.textContent = jobInput.value;
 
-  closePopup(formEditProfile);
+  closePopup();
 });
