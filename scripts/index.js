@@ -1,3 +1,4 @@
+
 const profileEditorPopup = document.querySelector('#profile-editor');
 
 const nameInput = profileEditorPopup.querySelector('.popup__input[name="name"]');
@@ -7,14 +8,19 @@ const nameElement = document.querySelector('.profile__name');
 const jobElement = document.querySelector('.profile__description');
 
 const profileEditorOpenButton = document.querySelector('.profile__edit-button');
+const formEditProfile = profileEditorPopup.querySelector('.popup__form');
 profileEditorOpenButton.addEventListener('click', () => {
+  formEditProfile.reset();
+
   nameInput.value = nameElement.textContent;
   jobInput.value = jobElement.textContent;
 
   openPopup(profileEditorPopup)
 });
 
-profileEditorPopup.querySelector('.popup__form').addEventListener('submit', () => {
+formEditProfile.addEventListener('submit', (e) => {
+  e.preventDefault();
+
   nameElement.textContent = nameInput.value;
   jobElement.textContent = jobInput.value;
 
@@ -83,16 +89,11 @@ function createCard(title, imgLink) {
 
   imgElement.addEventListener('click', openPreview);
 
-  trashButton.addEventListener('click', (e ) => {
+  trashButton.addEventListener('click', (e) => {
     e.target.parentNode.remove();
   });
   likeButton.addEventListener('click', (e) => {
-    if (e.target.classList.contains('element__like-button_active')) {
-      e.target.classList.remove('element__like-button_active');
-    } else {
-      e.target.classList.add('element__like-button_active');
-    }
-
+    e.target.classList.toggle('element__like-button_active')
   });
 
   return card;
@@ -132,45 +133,34 @@ initialCards.forEach(card => {
   addCard(cardInstance, false);
 });
 
-let currentClickOutsideHandler;
-let currentKeydownHandler;
+document.querySelectorAll('.popup').forEach((domElement) => {
+  domElement.addEventListener('click', clickOutsideHandler)
+});
 
 function openPopup(domElement) {
-  if (!domElement.classList.contains('popup_opened')) {
-    domElement.classList.add('popup_opened');
-    currentClickOutsideHandler = (e) => clickOutsideHandler(e, domElement);
-    currentKeydownHandler = (e) => KeydownHandler(e, domElement);
-    domElement.addEventListener('click', currentClickOutsideHandler);
-    document.addEventListener('keydown', currentKeydownHandler);
-  }
+  domElement.classList.add('popup_opened');
+  document.addEventListener('keydown', keydownHandler);
 }
 
 function closePopup(domElement) {
-  if (domElement.classList.contains('popup_opened')) {
-    domElement.classList.remove('popup_opened');
-    domElement.removeEventListener('click', currentClickOutsideHandler);
-    document.removeEventListener('keydown', currentKeydownHandler);
-  }
+  domElement.classList.remove('popup_opened');
+  document.removeEventListener('keydown', keydownHandler);
 }
 
-function clickOutsideHandler(e, domElement) {
+function clickOutsideHandler(e) {
   if (e.target === e.currentTarget || e.target.classList.contains('popup__close-button')) {
-    closePopup(domElement);
+    const popupActive = getPopupActive();
+    closePopup(popupActive);
   }
 }
 
-function KeydownHandler(e, domElement) {
-  if (e.key === 'Escape' && !e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
-    closePopup(domElement);
+function keydownHandler(e) {
+  if (e.key === 'Escape') {
+    const popupActive = getPopupActive();
+    closePopup(popupActive);
   }
 }
 
-const formEditProfile = document.querySelector('.popup__form');
-formEditProfile.addEventListener('submit', e => {
-  e.preventDefault();
-
-  nameElement.textContent = nameInput.value;
-  jobElement.textContent = jobInput.value;
-
-  closePopup(formEditProfile);
-});
+function getPopupActive() {
+  return document.querySelector('.popup_opened');
+}
