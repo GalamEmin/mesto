@@ -133,15 +133,15 @@ initialCards.forEach(card => {
 });
 
 let currentClickOutsideHandler;
-let currentKeypressHandler;
+let currentKeydownHandler;
 
 function openPopup(domElement) {
   if (!domElement.classList.contains('popup_opened')) {
     domElement.classList.add('popup_opened');
     currentClickOutsideHandler = (e) => clickOutsideHandler(e, domElement);
-    currentKeypressHandler = (e) => keypressHandler(e, domElement);
+    currentKeydownHandler = (e) => KeydownHandler(e, domElement);
     domElement.addEventListener('click', currentClickOutsideHandler);
-    document.addEventListener('keypress', currentKeypressHandler);
+    document.addEventListener('keydown', currentKeydownHandler);
   }
 }
 
@@ -149,7 +149,7 @@ function closePopup(domElement) {
   if (domElement.classList.contains('popup_opened')) {
     domElement.classList.remove('popup_opened');
     domElement.removeEventListener('click', currentClickOutsideHandler);
-    document.removeEventListener('keypress', currentKeypressHandler);
+    document.removeEventListener('keydown', currentKeydownHandler);
   }
 }
 
@@ -159,7 +159,7 @@ function clickOutsideHandler(e, domElement) {
   }
 }
 
-function keypressHandler(e, domElement) {
+function KeydownHandler(e, domElement) {
   if (e.key === 'Escape' && !e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
     closePopup(domElement);
   }
