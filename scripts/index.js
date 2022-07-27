@@ -7,14 +7,19 @@ const nameElement = document.querySelector('.profile__name');
 const jobElement = document.querySelector('.profile__description');
 
 const profileEditorOpenButton = document.querySelector('.profile__edit-button');
+const formEditProfile = profileEditorPopup.querySelector('.popup__form');
 profileEditorOpenButton.addEventListener('click', () => {
+  formEditProfile.reset();
+
   nameInput.value = nameElement.textContent;
   jobInput.value = jobElement.textContent;
 
   openPopup(profileEditorPopup)
 });
 
-profileEditorPopup.querySelector('.popup__form').addEventListener('submit', () => {
+formEditProfile.addEventListener('submit', (e) => {
+  e.preventDefault();
+
   nameElement.textContent = nameInput.value;
   jobElement.textContent = jobInput.value;
 
@@ -130,6 +135,17 @@ initialCards.forEach(card => {
 document.querySelectorAll('.popup').forEach((domElement) => {
   domElement.addEventListener('click', clickOutsideHandler)
 });
+<<<<<<< HEAD
+
+function openPopup(domElement) {
+  domElement.classList.add('popup_opened');
+  document.addEventListener('keydown', keydownHandler);
+}
+
+function closePopup(domElement) {
+  domElement.classList.remove('popup_opened');
+  document.removeEventListener('keydown', keydownHandler);
+=======
 document.addEventListener('keydown', keydownHandler);
 
 let popupActive;
@@ -142,15 +158,32 @@ function openPopup(domElement) {
 function closePopup() {
   popupActive.classList.remove('popup_opened');
   popupActive = null;
+>>>>>>> 2cb92fa9bfa9c6ecf1474fc72d496affe364a64c
 }
 
 function clickOutsideHandler(e) {
   if (e.target === e.currentTarget || e.target.classList.contains('popup__close-button')) {
+<<<<<<< HEAD
+    const popupActive = getPopupActive();
+    closePopup(popupActive);
+=======
     closePopup();
+>>>>>>> 2cb92fa9bfa9c6ecf1474fc72d496affe364a64c
   }
 }
 
 function keydownHandler(e) {
+<<<<<<< HEAD
+  if (e.key === 'Escape') {
+    const popupActive = getPopupActive();
+    closePopup(popupActive);
+  }
+}
+
+function getPopupActive() {
+  return document.querySelector('.popup_opened');
+}
+=======
   if (popupActive && e.key === 'Escape') {
     closePopup();
   }
@@ -165,3 +198,4 @@ formEditProfile.addEventListener('submit', e => {
 
   closePopup();
 });
+>>>>>>> 2cb92fa9bfa9c6ecf1474fc72d496affe364a64c
