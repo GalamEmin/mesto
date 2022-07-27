@@ -18,6 +18,13 @@
   opacity: .8;
 }
 
+.popup__button:disabled {
+  opacity: .2;
+  color: #000;
+  background-color: transparent;
+  cursor: default;
+}
+
 @media screen and (max-width: 767px) {
   .popup__button {
       font-size: 14px;

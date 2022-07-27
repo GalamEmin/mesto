@@ -46,8 +46,13 @@
         <button type="reset" class="popup__close-button"></button>
         <h2 class="popup__title">Редактировать профиль</h2>
         <form class="popup__form">
-          <input type="text" class="popup__input" name="name" placeholder="Имя">
-          <input type="text" class="popup__input" name="job" placeholder="О себе">
+          <input type="text" autocomplete="name" autocapitalize="words" class="popup__input" id="profile-name" name="name" placeholder="Имя" minlength="2" maxlength="40" required>
+          <p class="popup__error" id="profile-name-error"></p>
+          
+
+          <input type="text" class="popup__input" id="profile-job" name="job"  placeholder="О себе"  minlength="2" maxlength="200" required>
+          <p class="popup__error" id="profile-job-error"></p>
+
           <button type="submit" class="popup__button">Сохранить</button>
         </form>
       </div>
@@ -58,8 +63,11 @@
         <button type="button" class="popup__close-button"></button>
         <h2 class="popup__title">Новое место</h2>
         <form class="popup__form">
-          <input type="text" class="popup__input" name="title" placeholder="Название">
-          <input type="text" class="popup__input" name="link" placeholder="Ссылка на картинку">
+          <input type="text" class="popup__input" name="title" id="element-title" placeholder="Название" minlength="2" maxlength="30" required>
+          <p class="popup__error" id="element-title-error"></p>
+          
+          <input type="url" class="popup__input" name="link" id="element-link" placeholder="Ссылка на картинку" required>
+          <p class="popup__error" id="element-link-error"></p>
           <button type="submit" class="popup__button">Сохранить</button>
         </form>
       </div>
@@ -85,5 +93,6 @@
     </template>
 
     <script src="./scripts/index.js"></script>
+    <script src="./scripts/validate.js"></script>
   </body>
 </html>
