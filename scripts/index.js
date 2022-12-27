@@ -1,5 +1,5 @@
 import Card from './Card.js';
-import Form from './Popup__Form.js';
+//import Form from './Popup__Form.js';
 import FormValidator from './FormValidator.js';
 
 const defaultFormConfig = {
@@ -9,6 +9,63 @@ const defaultFormConfig = {
   inputErrorClass: 'popup__input_type_error',
   errorClass: 'popup__error_visible',
 };
+
+class Form {
+  constructor(element) {
+    this._element = element;
+  
+    this._closeButton = this._element.querySelector('.popup__close-button');
+
+    this.form = this._element.querySelector('.popup__form');
+
+    this._fullSubmitHandler = e => {
+      e.preventDefault();
+  
+      this.submitHandler
+        && this.submitHandler();
+  
+      this.toggle();
+
+      document.activeElement.blur(); // fixes mobile keyboard being stuck on the screen after form submission (due to `event.preventDefault()`)
+    }
+  }
+
+  _elementOpenedClass = 'popup_opened';
+  
+    toggle = () => {
+      this._element.classList.contains(this._elementOpenedClass)
+        ? this._removeListeners()
+        : this._setListeners();
+  
+      this._element.classList.toggle(this._elementOpenedClass);
+    }
+  
+    _clickHandler = e => {
+      (e.target === e.currentTarget || e.target === this._closeButton)
+        && this.toggle();
+    }
+
+    _keypressHandler = e => {
+        console.log('test key keydown');
+      (e.key === 'Escape' && !e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey)
+        && this.toggle();
+    }
+
+  _setListeners() {
+    this._element.addEventListener('click', this._clickHandler);
+  
+    document.addEventListener('keydown', this._keypressHandler);
+    
+    this.form.addEventListener('submit', this._fullSubmitHandler);
+  }
+  _removeListeners() {
+    this._element.removeEventListener('click', this._clickHandler);
+  
+    document.removeEventListener('keydown', this._keypressHandler);
+
+    this.form.removeEventListener('submit', this._fullSubmitHandler);
+  }
+}
 
 // FEAT: Profile editing
 
