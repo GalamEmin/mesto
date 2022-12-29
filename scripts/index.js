@@ -1,5 +1,4 @@
 import Card from './Card.js';
-//import Form from './Popup__Form.js';
 import FormValidator from './FormValidator.js';
 
 const defaultFormConfig = {
@@ -10,129 +9,94 @@ const defaultFormConfig = {
   errorClass: 'popup__error_visible',
 };
 
-class Form {
-  constructor(element) {
-    this._element = element;
-  
-    this._closeButton = this._element.querySelector('.popup__close-button');
-
-    this.form = this._element.querySelector('.popup__form');
-
-    this._fullSubmitHandler = e => {
-      e.preventDefault();
-  
-      this.submitHandler
-        && this.submitHandler();
-  
-      this.toggle();
-
-      document.activeElement.blur(); // fixes mobile keyboard being stuck on the screen after form submission (due to `event.preventDefault()`)
-    }
-  }
-
-  _elementOpenedClass = 'popup_opened';
-  
-    toggle = () => {
-      this._element.classList.contains(this._elementOpenedClass)
-        ? this._removeListeners()
-        : this._setListeners();
-  
-      this._element.classList.toggle(this._elementOpenedClass);
-    }
-  
-    _clickHandler = e => {
-      (e.target === e.currentTarget || e.target === this._closeButton)
-        && this.toggle();
-    }
-
-    _keypressHandler = e => {
-        console.log('test key keydown');
-      (e.key === 'Escape' && !e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey)
-        && this.toggle();
-    }
-
-  _setListeners() {
-    this._element.addEventListener('click', this._clickHandler);
-  
-    document.addEventListener('keydown', this._keypressHandler);
-    
-    this.form.addEventListener('submit', this._fullSubmitHandler);
-  }
-  _removeListeners() {
-    this._element.removeEventListener('click', this._clickHandler);
-  
-    document.removeEventListener('keydown', this._keypressHandler);
-
-    this.form.removeEventListener('submit', this._fullSubmitHandler);
-  }
-}
-
 // FEAT: Profile editing
 
 const profileEditorPopup = document.querySelector('#profile-editor');
-const profileEditor = new Form(profileEditorPopup);
-
-const profileEditorValidator = new FormValidator(defaultFormConfig, profileEditor.form);
+const profileEditorValidator = new FormValidator(defaultFormConfig, document.querySelector('.popup__form'));
 profileEditorValidator.enableValidation();
 
-const nameInput = profileEditor.form.elements.name;
-const jobInput = profileEditor.form.elements.job;
+const nameInput = profileEditorPopup.querySelector('.popup__input[name="name"]');
+const jobInput = profileEditorPopup.querySelector('.popup__input[name="job"]');
 
 const nameElement = document.querySelector('.profile__name');
 const jobElement = document.querySelector('.profile__description');
 
-profileEditor.form.addEventListener('reset', e => {
-  e.preventDefault();
+const profileEditorOpenButton = document.querySelector('.profile__edit-button');
+const formEditProfile = profileEditorPopup.querySelector('.popup__form');
+
+profileEditorOpenButton.addEventListener('click', () => {
+  formEditProfile.reset();
 
   nameInput.value = nameElement.textContent;
   jobInput.value = jobElement.textContent;
+
+  openPopup(profileEditorPopup)
 });
 
-const profileEditorOpenButton = document.querySelector('.profile__edit-button');
-profileEditorOpenButton.addEventListener('click', () => {
-  profileEditor.form.reset();
+formEditProfile.addEventListener('submit', (e) => {
+  e.preventDefault();
 
-  profileEditor.toggle();
-});
-
-profileEditor.submitHandler = () => {
   nameElement.textContent = nameInput.value;
   jobElement.textContent = jobInput.value;
-};
+
+  closePopup(profileEditorPopup)
+});
 
 // FEAT: Card adding
 
 const elementEditorPopup = document.querySelector('#element-editor');
-const elementEditor = new Form(elementEditorPopup);
+const formAddCard = elementEditorPopup.querySelector('.popup__form');
 
-const elementEditorValidator = new FormValidator(defaultFormConfig, elementEditor.form);
+const elementEditorValidator = new FormValidator(defaultFormConfig, elementEditorPopup.querySelector('.popup__form'));
 elementEditorValidator.enableValidation();
 
-const titleInput = elementEditor.form.elements.title;
-const linkInput = elementEditor.form.elements.link;
+const titleInput = elementEditorPopup.querySelector('.popup__input[name="title"]');
+const linkInput = elementEditorPopup.querySelector('.popup__input[name="link"]');
+
+formAddCard.addEventListener('submit', e => {
+  e.preventDefault();
+
+  const data = {
+    name: titleInput.value,
+    link: linkInput.value,
+  };
+  createInsertDefaultCard(data);
+
+  formAddCard.reset();
+  closePopup(elementEditorPopup);
+});
 
 const elementEditorOpenButton = document.querySelector('.profile__add-button');
-elementEditorOpenButton.addEventListener('click', elementEditor.toggle);
+elementEditorOpenButton.addEventListener('click', () => { openPopup(elementEditorPopup) });
 
 const elementsContainer = document.querySelector('.elements__list');
+
 function addCard(card) {
+  card._imgElement.addEventListener('click', openPreview);
   elementsContainer.prepend(card.created);
 }
+
 function createInsertDefaultCard(data) {
   const cardInstance = new Card(data, '#element-template');
 
   addCard(cardInstance);
 }
 
-elementEditor.submitHandler = () => {
-  createInsertDefaultCard({
-    name: titleInput.value,
-    link: linkInput.value,
-  });
+//  FEAT: Image preview
 
-  elementEditor.form.reset();
-};
+const imageViewerPopup = document.querySelector('#image-viewer');
 
+const popupImage = imageViewerPopup.querySelector('.popup__image');
+const popupCaption = imageViewerPopup.querySelector('.popup__caption');
+
+function openPreview(e) {
+  popupImage.src = e.target.src;
+  popupImage.alt = e.target.alt;
+
+  popupCaption.textContent = e.target.alt;
+
+  openPopup(imageViewerPopup)
+}
 
 // FEAT: Initial card loading
 
@@ -164,7 +128,37 @@ const initialCards = [
 ];
 
 initialCards.forEach(
-  createInsertDefaultCard
+    createInsertDefaultCard
 );
 
+document.querySelectorAll('.popup').forEach((domElement) => {
+  domElement.addEventListener('click', clickOutsideHandler)
+});
 
+function openPopup(domElement) {
+  domElement.classList.add('popup_opened');
+  document.addEventListener('keydown', keydownHandler);
+}
+
+function closePopup(domElement) {
+  domElement.classList.remove('popup_opened');
+  document.removeEventListener('keydown', keydownHandler);
+}
+
+function clickOutsideHandler(e) {
+  if (e.target === e.currentTarget || e.target.classList.contains('popup__close-button')) {
+    const popupActive = getPopupActive();
+    closePopup(popupActive);
+  }
+}
+
+function keydownHandler(e) {
+  if (e.key === 'Escape') {
+    const popupActive = getPopupActive();
+    closePopup(popupActive);
+  }
+}
+
+function getPopupActive() {
+  return document.querySelector('.popup_opened');
+}

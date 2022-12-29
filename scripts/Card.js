@@ -1,55 +1,3 @@
-// import Popup from './Popup.js';
-
-//  FEAT: Image preview
-
-class Popup {
-    constructor(element) {
-      this._element = element;
-  
-      this._closeButton = this._element.querySelector('.popup__close-button');
-    }
-  
-    _elementOpenedClass = 'popup_opened';
-  
-    toggle = () => {
-      this._element.classList.contains(this._elementOpenedClass)
-        ? this._removeListeners()
-        : this._setListeners();
-  
-      this._element.classList.toggle(this._elementOpenedClass);
-    }
-  
-    _clickHandler = e => {
-      (e.target === e.currentTarget || e.target === this._closeButton)
-        && this.toggle();
-    }
-
-    _keypressHandler = e => {
-        console.log('test key keydown');
-      (e.key === 'Escape' && !e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey)
-        && this.toggle();
-    }
-  
-    _setListeners() {
-      this._element.addEventListener('click', this._clickHandler);
-  
-      document.addEventListener('keydown', this._keypressHandler);
-    }
-    _removeListeners() {
-      this._element.removeEventListener('click', this._clickHandler);
-  
-      document.removeEventListener('keydown', this._keypressHandler);
-    }
-  }
-
-const imageViewerPopup = document.querySelector('#image-viewer');
-const imageViewer = new Popup(imageViewerPopup);
-
-const popupImage = imageViewerPopup.querySelector('.popup__image');
-const popupCaption = imageViewerPopup.querySelector('.popup__caption');
-
-
-
 export default class Card {
   constructor(cardData, templateSelector) {
     this._name = cardData.name;
@@ -64,15 +12,6 @@ export default class Card {
     return document.querySelector(this._templateSelector).content.firstElementChild;
   }
 
-  _preview = () => {
-    popupImage.src = this._link;
-    popupImage.alt = this._name; // .alt is excessive in this context. For a blind person accessing the page through a screen reader, this would sound like duplicated information - "Image Curonian Spit Curonian Spit"
-
-    popupCaption.textContent = this._name;
-
-    imageViewer.toggle();
-  }
-
   _toggleLike = () =>
     this._likeButton.classList.toggle('element__like-button_active');
 
@@ -80,7 +19,6 @@ export default class Card {
     this._card.remove();
 
   _setListeners() {
-    this._imgElement.addEventListener('click', this._preview);
     this._trashButton.addEventListener('click', this._remove);
     this._likeButton.addEventListener('click', this._toggleLike);
   }
@@ -111,6 +49,4 @@ export default class Card {
 
     return this._card;
   }
-
-  
 }
