@@ -72,12 +72,11 @@ elementEditorOpenButton.addEventListener('click', () => { openPopup(elementEdito
 const elementsContainer = document.querySelector('.elements__list');
 
 function addCard(card) {
-  card._imgElement.addEventListener('click', openPreview);
   elementsContainer.prepend(card.created);
 }
 
 function createInsertDefaultCard(data) {
-  const cardInstance = new Card(data, '#element-template');
+  const cardInstance = new Card(data, '#element-template', openPreview);
 
   addCard(cardInstance);
 }
@@ -131,17 +130,19 @@ initialCards.forEach(
     createInsertDefaultCard
 );
 
-document.querySelectorAll('.popup').forEach((domElement) => {
-  domElement.addEventListener('click', clickOutsideHandler)
+const popups = document.querySelectorAll('.popup');
+
+popups.forEach((popup) => {
+  popup.addEventListener('click', clickOutsideHandler)
 });
 
-function openPopup(domElement) {
-  domElement.classList.add('popup_opened');
+function openPopup(popup) {
+  popup.classList.add('popup_opened');
   document.addEventListener('keydown', keydownHandler);
 }
 
-function closePopup(domElement) {
-  domElement.classList.remove('popup_opened');
+function closePopup(popup) {
+  popup.classList.remove('popup_opened');
   document.removeEventListener('keydown', keydownHandler);
 }
 

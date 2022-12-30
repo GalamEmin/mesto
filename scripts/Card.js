@@ -1,14 +1,15 @@
 export default class Card {
-  constructor(cardData, templateSelector) {
+  constructor(cardData, templateSelector, openPreview) {
     this._name = cardData.name;
     this._link = cardData.link;
+    this._openPreview = openPreview;
 
     this._templateSelector = templateSelector;
 
     this.created = this._create();
   }
 
-  get _template() {
+  _getTemplate() {
     return document.querySelector(this._templateSelector).content.firstElementChild;
   }
 
@@ -21,6 +22,7 @@ export default class Card {
   _setListeners() {
     this._trashButton.addEventListener('click', this._remove);
     this._likeButton.addEventListener('click', this._toggleLike);
+    this._imgElement.addEventListener('click', this._openPreview);
   }
 
   _buildImage(element) {
@@ -33,7 +35,7 @@ export default class Card {
   }
 
   _create() {
-    this._card = this._template.cloneNode(1);
+    this._card = this._getTemplate().cloneNode(1);
 
     this._imgElement = this._card.querySelector('.element__image');
     this._buildImage(this._imgElement);
