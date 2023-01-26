@@ -1,4 +1,5 @@
-.popup__form {
+.element__likes {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }

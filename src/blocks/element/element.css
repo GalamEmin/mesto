@@ -1,8 +1,10 @@
-
 .element {
+  position: relative;
+
   background-color: #fff;
+
   border-radius: 10px;
   overflow: hidden;
+
   font-size: 0;
-  position: relative;
 }
