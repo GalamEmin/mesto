@@ -1,81 +1,86 @@
-const cohortId = 'cohort-57';
-const token = '7fecce1d-0c55-465f-89f3-15e630f20527';
-
-const api = {
-  url: 'mesto.nomoreparties.co',
-  protocol: 'https://',
-  version: 'v1',
-};
-
-class Api {
+export default class Api {
   constructor(options) {
     this._baseUrl = options.baseUrl;
     this._headers = options.headers;
   }
 
-  _handleFetch = res =>
-    res.ok
-      ? res.json()
-      : Promise.reject(`Ошибка: ${res.status}`);
-
-  _customFetch(target, method, body) {
-    const options = {
-      headers: this._headers
-    };
-
-    if (method && (method !== 'GET')) {
-      options.method = method;
-      if (method !== 'DELETE') {
-        options.headers['Content-Type'] = 'application/json';
-      }
+  _parseResponse(res) {
+    if (res.ok) {
+      return res.json();
     }
-
-    if (body) {
-      options.body = JSON.stringify(body);
-    }
-
-    return fetch(`${this._baseUrl}/${target}`, options)
-      .then(this._handleFetch);
-  }
-
-  getUserInfo() {
-    return this._customFetch('users/me');
+    return Promise.reject(`Ошибка: ${res.status}`)
   }
 
   getInitialCards() {
-    return this._customFetch('cards');
+    return fetch(`${this._baseUrl}/cards`, {
+      headers: this._headers
+    })
+      .then(res => this._parseResponse(res));
   }
 
-  editProfile = ({ name, about }) =>
-    this._customFetch('users/me', 'PATCH', {
-      name,
-      about
-    });
+  addCard(data) {
+    return fetch(`${this._baseUrl}/cards`, {
+      method: 'POST',
+      headers: this._headers,
+      body: JSON.stringify({
+        name: data.name,
+        link: data.link
+      })
+    })
+      .then(res => this._parseResponse(res));
+  }
 
-  addCard = (name, link) =>
-    this._customFetch('cards', 'POST', {
-      name,
-      link
-    });
+  deleteCard(cardId) {
+    return fetch(`${this._baseUrl}/cards/${cardId}`, {
+      method: 'DELETE',
+      headers: this._headers
+    })
+      .then(res => this._parseResponse(res));
+  }
 
-  deleteCard = cardId =>
-    this._customFetch(`cards/${cardId}`, 'DELETE');
+  setLike(cardId) {
+    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
+      method: 'PUT',
+      headers: this._headers
+    })
+      .then(res => this._parseResponse(res));
+  }
 
-  likeCard = cardId =>
-    this._customFetch(`cards/likes/${cardId}`, 'PUT');
+  deleteLike(cardId) {
+    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
+      method: 'DELETE',
+      headers: this._headers
+    })
+      .then(res => this._parseResponse(res));
+  }
 
-  unLikeCard = cardId =>
-    this._customFetch(`cards/likes/${cardId}`, 'DELETE');
+  getUserInfo() {
+    return fetch(`${this._baseUrl}/users/me`, {
+      headers: this._headers
+    })
+      .then(res => this._parseResponse(res));
+  }
 
-  updateAvatar = ({ avatar }) =>
-    this._customFetch('users/me/avatar', 'PATCH', {
-      avatar
-    });
+  editUserInfo(data) {
+    return fetch(`${this._baseUrl}/users/me`, {
+      method: 'PATCH',
+      headers: this._headers,
+      body: JSON.stringify({
+        name: data.username,
+        about: data.job
+      })
+    })
+      .then(res => this._parseResponse(res));
+  }
+
+  editAvatar(data) {
+    return fetch(`${this._baseUrl}/users/me/avatar`, {
+      method: 'PATCH',
+      headers: this._headers,
+      body: JSON.stringify({
+        avatar: data.avatar
+      })
+    })
+      .then(res => this._parseResponse(res));
+  }
 }
-
-export default new Api({
-  baseUrl: `${api.protocol}${api.url}/${api.version}/${cohortId}`,
-  headers: {
-    authorization: token
-  }
-}); 

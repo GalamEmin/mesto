@@ -1,9 +1,22 @@
 .elements {
-  padding-bottom: calc(145px - 138px);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto;
+  row-gap: 20px;
+  column-gap: 17px;
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 1024px) {
   .elements {
-    padding-bottom: calc(98px - 86px);
+   grid-template-columns: repeat(2, 1fr);
+   margin: 0 auto;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .elements {
+    display: flex;
+    flex-direction: column;
+    column-gap: 0;
   }
 }

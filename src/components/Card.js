@@ -1,85 +1,84 @@
 export default class Card {
-  constructor(data, templateSelector, handleCardClick, handleDeleteClick, handleLikeClick) {
-    this.data = data;
-
-    this._templateSelector = templateSelector;
-
+  constructor({ data, cardSelector, userId, handleCardClick, handleDeleteIconClick, handleSetLike, handleRemoveLike }) {
+    this._name = data.name;
+    this._link = data.link;
+    this._cardSelector = cardSelector;
+    this._userId = userId;
+    this._cardId = data._id;
+    this._cardOwnerId = data.owner._id;
     this._handleCardClick = handleCardClick;
-    this._handleDeleteClick = handleDeleteClick;
-    this._handleLikeClick = handleLikeClick;
+    this._handleDeleteIconClick = handleDeleteIconClick;
+    this._likes = data.likes;
+    this._handleSetLike = handleSetLike;
+    this._handleRemoveLike = handleRemoveLike;
+  }
 
-    this.created = this._create();
+  _getTemplate() {
+      this._card = document
+      .querySelector(this._cardSelector)
+      .content
+      .querySelector('.element')
+      .cloneNode(true);
 
-    if (this.data.liked) {
-      this.liked = 1;
+    return this._card;
+  }
+
+  deleteCard() {
+    this._element.remove();
+    this._element = null;
+  }
+
+  _setEventListeners() {
+    this._image.addEventListener('click', () => {
+      this._handleCardClick(this._name, this._link);
+    })
+    this._deleteBtn.addEventListener('click', () => {
+      this._handleDeleteIconClick(this._cardId);
+    })
+    this._likeBtn.addEventListener('click', () => {
+      if (this._likeBtn.classList.contains('element__like-btn_active')) {
+        this._handleRemoveLike(this._cardId);
+      } else {
+        this._handleSetLike(this._cardId);
+      }
+    })
+  }
+
+  generateCard() {
+    this._element = this._getTemplate();
+    this._image = this._element.querySelector('.element__img');
+    this._likeBtn = this._element.querySelector('.element__like-btn');
+    this._likesNumber = this._element.querySelector('.element__likes-number');
+    this._deleteBtn = this._element.querySelector('.element__delete-btn');
+
+    this._image.src = this._link;
+    this._image.alt = this._name;
+    this._element.querySelector('.element__title').textContent = this._name;
+    this._hasDeleteBtn();
+    this._isCardLiked();
+    this._likesNumber.textContent = this._likes.length;
+    this._setEventListeners();
+
+    return this._element;
+  }
+
+  _isCardLiked() {
+    if (this._likes.some((user) => {
+      return this._userId === user._id;
+    })) {
+      this._likeBtn.classList.add('element__like-btn_active');
     }
   }
 
-  set liked(value) {
-    this._likeButton.classList[(value ? 'add' : 'remove')]('element__like-button_active');
-    this.data.liked = value;
+  handleLikeCard(data) {
+    this._likes = data.likes;
+    this._likesNumber.textContent = this._likes.length;
+    this._likeBtn.classList.toggle('element__like-btn_active');
   }
 
-  get liked() {
-    return this.data.liked;
-  }
-
-  // toggleLike = () =>
-  //   this._likeButton.classList.toggle('element__like-button_active');
-
-  remove = () =>
-    this._card.remove();
-
-  updateLikes(quantity) {
-    this._likeCounter.textContent = quantity;
-  }
-
-  get _template() {
-    return document.querySelector(this._templateSelector).content.firstElementChild;
-  }
-
-  _setListeners() {
-    this._imgElement.addEventListener('click', this._handleCardClick);
-    this.data.removable
-      && this._trashButton.addEventListener('click', this._handleDeleteClick);
-    this._likeButton.addEventListener('click', this._handleLikeClick);
-  }
-
-  _buildImage(element) {
-    element.src = this.data.link;
-    element.alt = this.data.name;
-  }
-
-  _buildTitle(element) {
-    element.textContent = this.data.name;
-  }
-
-  _create() {
-    this._card = this._template.cloneNode(1);
-
-    this._imgElement = this._card.querySelector('.element__image');
-    this._buildImage(this._imgElement);
-
-    const trashButtonClass = 'element__trash-button';
-    const trashButtonSelector = `.${trashButtonClass}`;
-    const trashButtonVisibleClass = `${trashButtonClass}_visible`;
-
-    this._trashButton = this._card.querySelector(trashButtonSelector);
-
-    this.data.removable
-      && this._trashButton.classList.add(trashButtonVisibleClass);
-
-    this._titleElement = this._card.querySelector('.element__title');
-    this._buildTitle(this._titleElement);
-
-    this._likeButton = this._card.querySelector('.element__like-button');
-
-    this._likeCounter = this._card.querySelector('.element__like-counter');
-
-    this.updateLikes(this.data.likes.length);
-
-    this._setListeners();
-
-    return this._card;
+  _hasDeleteBtn() {
+    if (this._userId !== this._cardOwnerId) {
+      this._deleteBtn.remove();
+    }
   }
 }

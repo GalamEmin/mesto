@@ -1,55 +1,42 @@
-import Popup from './Popup';
-
-import { defaultFormConfig } from '../utils/constants';
+import Popup from "./Popup.js";
 
 export default class PopupWithForm extends Popup {
-  constructor(elementSelector, formSubmitHandler) {
-    super(elementSelector);
-
-    this.form = this._element.querySelector(defaultFormConfig.formSelector);
-    this._submitButton = this.form.querySelector(defaultFormConfig.submitButtonSelector);
-    this._submitButtonTitle = this._submitButton.textContent;
-
-    this._formSubmitHandler = formSubmitHandler;
+  constructor({ popupSelector, handleFormSubmit }) {
+    super(popupSelector);
+    this._handleFormSubmit = handleFormSubmit;
+    this._popupForm = this._popup.querySelector('.popup__form');
+    this._inputList = this._popupForm.querySelectorAll('.form__input');
+    this._submitBtn = this._popupForm.querySelector('.form__submit');
+    this._submitBtnText = this._submitBtn.textContent;
   }
 
-  _defaultFormSubmitHandler = e => {
-    e.preventDefault();
+  _getInputValues() {
+    this._formValues = {};
+    this._inputList.forEach(input => {
+      this._formValues[input.name] = input.value;
+    })
 
-    this._submitButton.textContent = 'Сохранение...';
-
-    if (this._formSubmitHandler) {
-      this._formSubmitHandler(this._getInputValues())
-        .then(() => this.close())
-        .catch(console.error)
-        .finally(() =>
-          this._submitButton.textContent = this._submitButtonTitle
-        );
-    }
-
-    document.activeElement.blur(); // fixes mobile keyboard being stuck on the screen after form submission (due to `event.preventDefault()`)
+    return this._formValues;
   }
 
   setEventListeners() {
     super.setEventListeners();
-    
-    this.form.addEventListener('submit', this._defaultFormSubmitHandler);
+    this._popupForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      this._handleFormSubmit(this._getInputValues());
+    })
   }
 
   close() {
-    super.close();
-
-    this.form.reset();
+  super.close();
+  this._popupForm.reset();
   }
 
-  _getInputValues() {
-    const { elements } = this.form;
-    const values = {};
-    Array.from(elements).forEach(el => {
-      if (el.tagName === 'INPUT') {
-        values[el.name] = el.value;
-      }
-    })
-    return values;
+  loading(isLoading) {
+    if (isLoading) {
+      this._submitBtn.textContent = 'Сохранение...'
+    } else {
+      this._submitBtn.textContent = this._submitBtnText;
+    }
   }
 }
